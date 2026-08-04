@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Syne:wght@700&display=swap');
+
+/* --------------------------------------------------
+   HOST / CONFIGURAÇÃO DO COMPONENTE
+-------------------------------------------------- */
+:host {
+  --blue-900: #0f1f3d;
+  --blue-700: #1a3a6e;
+  --blue-500: #2563eb;
+  --blue-400: #3b82f6;
+  --blue-100: #dbeafe;
+  --blue-50:  #eff6ff;
+  --gray-900: #111827;
+  --gray-600: #4b5563;
+  --gray-300: #d1d5db;
+  --gray-100: #f3f4f6;
+  --white:    #ffffff;
+  --shadow-sm: 0 1px 3px rgba(15, 31, 61, 0.08), 0 1px 2px rgba(15, 31, 61, 0.06);
+  --shadow-md: 0 4px 16px rgba(15, 31, 61, 0.12), 0 2px 6px rgba(15, 31, 61, 0.08);
+  --shadow-lg: 0 12px 32px rgba(15, 31, 61, 0.16), 0 4px 10px rgba(15, 31, 61, 0.10);
+  --radius: 14px;
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* --------------------------------------------------
+   HEADER
+-------------------------------------------------- */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 60px;
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-300);
+  box-shadow: 0 1px 4px rgba(15, 31, 61, 0.07);
+  font-family: 'DM Sans', sans-serif;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* --------------------------------------------------
+   BRAND
+-------------------------------------------------- */
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.brand-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--blue-500);
+}
+
+.brand-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--blue-900);
+  letter-spacing: 0.5px;
+}
+
+/* --------------------------------------------------
+   AÇÕES DO HEADER
+-------------------------------------------------- */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* --------------------------------------------------
+   MENU DO USUÁRIO
+-------------------------------------------------- */
+.user-menu {
+  position: relative;
+  padding: 8px 16px;
+  background: var(--white);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius);
+  color: var(--gray-900);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-menu:hover {
+  background: #f2f3fe;
+  border-color: #cacbfe;
+  color: #2926dc;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--gray-600);
+}
+
+/* --------------------------------------------------
+   SETA DO DROPDOWN
+-------------------------------------------------- */
+.dropdown-arrow {
+  display: inline-block;
+  font-size: 0.65rem;
+  transition: transform 0.25s ease;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(-180deg);
+}
+
+/* --------------------------------------------------
+   DROPDOWN
+-------------------------------------------------- */
+.dropdown-content {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background: var(--white);
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(15, 31, 61, 0.1);
+  min-width: 160px;
+  z-index: 1001;
+  overflow: hidden;
+  transform-origin: top right;
+  animation: dropdownOpen 0.2s ease forwards;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* --------------------------------------------------
+   ESTADOS DO DROPDOWN
+-------------------------------------------------- */
+.dropdown-item:hover {
+  background: #f9fafb;
+}
+
+.dropdown-item.new-user:hover {
+  background: #f2f3fe;
+  color: #2926dc;
+}
+
+.dropdown-item.new-neighborhood:hover {
+  background: #f2f3fe;
+  color: #2926dc;
+}
+
+.dropdown-item.new-block:hover {
+  background: #f2f3fe;
+  color: #2926dc;
+}
+
+.dropdown-item.settings:hover {
+  background: #f5fef2;
+  color: #3aad1d;
+}
+
+.dropdown-item.logout:hover {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* --------------------------------------------------
+   BANNER DE SESSÃO EXPIRADA
+-------------------------------------------------- */
+.session-expired-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  background: #fef2f2;
+  border-bottom: 1px solid #fecaca;
+  color: #dc2626;
+  text-align: center;
+  padding: 14px 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  animation: slideDown 0.3s ease both;
+}
+
+/* --------------------------------------------------
+   ANIMAÇÕES
+-------------------------------------------------- */
+@keyframes dropdownOpen {
+  from { opacity: 0; transform: scale(0.95) translateY(-6px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-100%); }
+  to   { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,82 @@
+<section>
+  <div class="register-card">
+    <div class="card-header">
+      <h1>Editar Bairro</h1>
+      <p>Altere os dados do bairro e salve as alterações</p>
+    </div>
+
+    @if (loadingNeighborhoods) {
+      <p class="loading-text">Carregando dados do bairro...</p>
+    } @else {
+
+      @if (errorMessage) {
+        <div class="alert alert-error">{{ errorMessage }}</div>
+      }
+
+      @if (successMessage) {
+        <div class="alert alert-success">{{ successMessage }}</div>
+      }
+
+      <div class="form">
+        <div class="field">
+          <label for="number">Nome do Bairro</label>
+          <input
+            id="number"
+            type="text"
+            placeholder="Ex: Parque X"
+            [(ngModel)]="form.name"
+          />
+        </div>
+        
+        <!--
+        <div class="field">
+          <label for="latitude">Latitude <span class="field-hint">(-90 a 90)</span></label>
+          <input
+            id="latitude"
+            type="number"
+            placeholder="Ex: -12.1234"
+            min="-90"
+            max="90"
+            step="0.0001"
+            [(ngModel)]="form.latitude"
+          />
+        </div>
+
+        <div class="field">
+          <label for="longitude">Longitude <span class="field-hint">(-180 a 180)</span></label>
+          <input
+            id="longitude"
+            type="number"
+            placeholder="Ex: -12.1234"
+            min="-180"
+            max="180"
+            step="0.0001"
+            [(ngModel)]="form.longitude"
+          />
+        </div>
+
+        <div class="field">
+          <label for="neighborhood">Bairro</label>
+          @if (loadingNeighborhoods) {
+            <p class="loading-text">Carregando bairros...</p>
+          } @else {
+            <select id="neighborhood" [(ngModel)]="form.neighborhoodId">
+              <option value="" disabled>Selecione um bairro</option>
+              @for (n of neighborhoods; track n.id) {
+                <option [value]="n.id">{{ n.name }}</option>
+              }
+            </select>
+          }
+        </div>
+        -->
+        <div class="actions">
+          <button class="btn-secondary" type="button" (click)="goBack()">Cancelar</button>
+          <button class="btn-primary" type="button" (click)="update()" [disabled]="loading">
+            {{ loading ? 'Salvando...' : 'Salvar' }}
+          </button>
+        </div>
+      </div>
+
+    }
+  </div>
+</section>

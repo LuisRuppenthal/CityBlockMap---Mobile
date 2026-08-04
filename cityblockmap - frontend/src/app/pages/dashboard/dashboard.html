@@ -1,0 +1,47 @@
+<section>
+    <div class="dashboard-header">
+        <h1>Dashboard</h1>
+        <p>Selecione uma seção para continuar</p>
+    </div>
+
+    <div class="dashboard-grid">
+
+        <div class="dashboard-card" (click)="goTo('/blocks')">
+            <!--<img class="card-icon" src="map_854952.png">-->
+            <div class="card-info">
+                <span class="card-title">Quadras</span>
+                @if (loadingBlocks) {
+                <span class="card-count">Carregando...</span>
+                } @else {
+                <span class="card-count">{{ blockCount }} cadastradas</span>
+                }
+            </div>
+            <span class="card-arrow">→</span>
+        </div>
+
+        <div class="dashboard-card" (click)="goTo('/neighborhoods')">
+            <!--<img class="card-icon" src="map_854952.png">-->
+            <div class="card-info">
+                <span class="card-title">Bairros</span>
+                @if (loadingNeighborhoods) {
+                <span class="card-count">Carregando...</span>
+                } @else {
+                <span class="card-count">{{ neighborhoodCount }} cadastrados</span>
+                }
+            </div>
+            <span class="card-arrow">→</span>
+        </div>
+
+
+        <!--
+        @if (isAdmin()) {
+        <div class="dashboard-card" (click)="goTo('/register')">
+            <img class="card-icon" src="do-utilizador.png">
+            <div class="card-info">
+                <span class="card-title">Usuários</span>
+                <span class="card-count">Gerenciar usuários</span>
+            </div>
+            <span class="card-arrow">→</span>
+        </div>-->
+    </div>
+</section>

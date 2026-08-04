@@ -1,0 +1,20 @@
+<div class="modal-card">
+  <h2>Selecionar Localização</h2>
+  <p>Clique no mapa para marcar a localização da quadra</p>
+
+  @if (selectedLat !== null && selectedLng !== null) {
+    <div class="coordinates">
+      <span class="coord-item">Lat: {{ selectedLat | number:'1.4-4' }}</span>
+      <span class="coord-item">Lng: {{ selectedLng | number:'1.4-4' }}</span>
+    </div>
+  }
+
+  <div id="map-picker" class="map-container"></div>
+
+  <div class="actions">
+    <button class="btn-cancel" type="button" (click)="closeMapPickerModal()">Cancelar</button>
+    <button class="btn-confirm" type="button" (click)="getCoordinates()" [disabled]="selectedLat == null">
+      Confirmar
+    </button>
+  </div>
+</div>

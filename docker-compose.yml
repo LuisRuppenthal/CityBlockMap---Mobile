@@ -1,0 +1,52 @@
+services:
+  backend:
+    depends_on:
+      postgres:
+        condition: service_healthy
+    build:
+      context: ./cityblockmap - backend
+    ports:
+      - "8080:8080"
+    environment:
+      ADMIN_DEFAULT_PASSWORD: ${ADMIN_DEFAULT_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      DB_USERNAME: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - cityblockmap-network
+
+  frontend:
+    build:
+      context: ./cityblockmap - frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - cityblockmap-network
+
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - cityblockmap-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d cityblockmap"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  cityblockmap-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

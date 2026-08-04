@@ -1,0 +1,77 @@
+<section>
+  <div class="register-card">
+    <div class="card-header">
+      <h1>Novo Usuário</h1>
+      <p>Preencha os dados para criar um novo cadastro</p>
+    </div>
+
+    @if (errorMessage) {
+      <div class="alert alert-error">{{ errorMessage }}</div>
+    }
+
+    @if (successMessage) {
+      <div class="alert alert-success">{{ successMessage }}</div>
+    }
+
+    <div class="form">
+      <div class="field">
+        <label for="login">Login</label>
+        <input
+          id="login"
+          type="text"
+          placeholder="Digite o login"
+          [(ngModel)]="form.login"
+        />
+      </div>
+
+      <div class="field">
+        <label for="password">Senha</label>
+        <input
+          id="password"
+          type="password"
+          placeholder="Digite a senha"
+          [(ngModel)]="form.password"
+        />
+      </div>
+
+      <div class="field">
+        <label for="role">Perfil</label>
+        <select id="role" [(ngModel)]="form.role">
+          <option value="" disabled>Selecione um perfil</option>
+          <option value="ADMIN">Administrador</option>
+          <option value="USER">Usuário</option>
+        </select>
+      </div>
+
+      <!--
+      <div class="field">
+        <label>Bairros</label>
+        @if (loadingNeighborhoods) {
+          <p class="loading-text">Carregando bairros...</p>
+        } @else {
+            
+          <div class="checkbox-list">
+            @for (n of neighborhoods; track n.id) {
+              <label class="checkbox-item">
+                <input
+                  type="checkbox"
+                  [value]="n.id"
+                  (change)="toggleNeighborhood(n)"
+                  [checked]="isSelected(n.id)"
+                />
+                {{ n.name }}
+              </label>
+            }
+          </div>
+        }
+      </div>-->
+
+      <div class="actions">
+        <button class="btn-secondary" type="button" (click)="goBack()">Cancelar</button>
+        <button class="btn-primary" type="button" (click)="register()" [disabled]="loading">
+          {{ loading ? 'Cadastrando...' : 'Cadastrar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

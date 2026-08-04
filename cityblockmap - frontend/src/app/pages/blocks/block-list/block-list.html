@@ -1,0 +1,39 @@
+<section>
+  <h1>Lista de Quadras</h1>
+
+  @if (loading) {
+  <p>Carregando quadras...</p>
+  }
+
+  @if (errorMessage) {
+  <p>{{ errorMessage }}</p>
+  }
+
+  @if (!loading && !errorMessage && blocks.length > 0) {
+  <ul>
+    @for (block of blocks; track block.id) {
+    <li>
+      <button type="button" (click)="openBlock(block.id)">
+        <span class="block-text">
+          {{ block.neighborhood.name }} - {{ block.number }}
+        </span>
+        <div class="block_buttons">
+          @if (isAdmin()) {
+          <div class="block_edit_button" (click)="$event.stopPropagation(); goToBlockEdit(block.id)">
+            <img src="pen-to-square-regular.png" alt="Editar" />
+          </div>
+          <div class="block_delete_button" (click)="$event.stopPropagation(); openDeleteModal(block.id)">
+            <img src="trash-can-regular.png" alt="deletar" />
+          </div>
+          }
+        </div>
+      </button>
+    </li>
+    }
+  </ul>
+  }
+
+  @if (!loading && !errorMessage && blocks.length === 0) {
+  <p>Nenhuma quadra encontrada.</p>
+  }
+</section>

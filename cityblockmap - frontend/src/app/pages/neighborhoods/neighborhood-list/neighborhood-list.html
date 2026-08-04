@@ -1,0 +1,40 @@
+<section>
+  <h1>Lista de Bairros</h1>
+
+  
+  @if (loading) {
+  <p>Carregando quadras...</p>
+  }
+
+  @if (errorMessage) {
+  <p>{{ errorMessage }}</p>
+  }
+
+  @if (!loading && !errorMessage && neighborhoods.length > 0) {
+  <ul>
+    @for (neighborhood of neighborhoods; track neighborhood.id) {
+    <li>
+      <button type="button" (click)="openNeighborhood(neighborhood.id)">
+        <span class="neighborhood-text">
+        <!--{{ neighborhood.id }} - --> {{ neighborhood.name }}
+         </span>
+        <div class="neighborhood_buttons">
+          @if (isAdmin()) {
+          <div class="neighborhood_edit_button" (click)="$event.stopPropagation(); goToNeighborhoodEdit(neighborhood.id)">
+            <img src="pen-to-square-regular.png" alt="Editar" />
+          </div>
+          <div class="neighborhood_delete_button" (click)="$event.stopPropagation(); openDeleteModal(neighborhood.id)">
+            <img src="trash-can-regular.png" alt="deletar" />
+          </div>
+          }
+        </div>
+      </button>
+    </li>
+    }
+  </ul>
+  }
+
+  @if (!loading && !errorMessage && neighborhoods.length === 0) {
+  <p>Nenhuma quadra encontrada.</p>
+  }
+</section>

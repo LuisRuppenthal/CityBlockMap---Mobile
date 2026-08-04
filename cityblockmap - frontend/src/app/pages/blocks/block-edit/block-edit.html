@@ -1,0 +1,84 @@
+<section>
+  <div class="register-card">
+    <div class="card-header">
+      <h1>Editar Quadra</h1>
+      <p>Altere os dados da quadra e salve as alterações</p>
+    </div>
+
+    @if (loadingBlock) {
+      <p class="loading-text">Carregando dados da quadra...</p>
+    } @else {
+
+      @if (errorMessage) {
+        <div class="alert alert-error">{{ errorMessage }}</div>
+      }
+
+      @if (successMessage) {
+        <div class="alert alert-success">{{ successMessage }}</div>
+      }
+
+      <div class="form">
+        <div class="field_name">
+          <label for="number">Número / Nome</label>
+          <input
+            id="number"
+            type="text"
+            placeholder="Ex: Quadra 05"
+            [(ngModel)]="form.number"
+          />
+        </div>
+
+        <div class="field_latitude">
+          <label for="latitude">Latitude <span class="field-hint">(-90 a 90)</span></label>
+          <div class="input-icon-wrapper">
+            <input
+              id="latitude"
+              type="number"
+              placeholder="Ex: -12.1234"
+              min="-90"
+              max="90"
+              step="0.0001"
+              [(ngModel)]="form.latitude"
+            />
+            <img class="map_icon" src="mapa.png" (click)="openMapPickerModal()" alt="inserir_mapa">
+          </div>
+        </div>
+
+        <div class="field_longitude">
+          <label for="longitude">Longitude <span class="field-hint">(-180 a 180)</span></label>
+          <input
+            id="longitude"
+            type="number"
+            placeholder="Ex: -12.1234"
+            min="-180"
+            max="180"
+            step="0.0001"
+            [(ngModel)]="form.longitude"
+          />
+        </div>
+
+        <div class="field_neighborhood">
+          <label for="neighborhood">Bairro</label>
+          @if (loadingNeighborhoods) {
+            <p class="loading-text">Carregando bairros...</p>
+          } @else {
+            <select id="neighborhood" [(ngModel)]="form.neighborhoodId">
+              <option value="" disabled>Selecione um bairro</option>
+              @for (n of neighborhoods; track n.id) {
+                <option [value]="n.id">{{ n.name }}</option>
+              }
+            </select>
+          }
+        </div>
+
+        <div class="actions">
+          <button class="btn-secondary" type="button" (click)="goBack()">Cancelar</button>
+          <button class="btn-primary" type="button" (click)="update()" [disabled]="loading">
+            {{ loading ? 'Salvando...' : 'Salvar' }}
+          </button>
+        </div>
+      </div>
+
+    }
+  </div>
+</section>
