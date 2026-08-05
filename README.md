@@ -2,6 +2,8 @@
 
 Sistema web para mapeamento de quadras e bairros de uma cidade. Desenvolvido para facilitar a localização de quadras e bairros, sendo especialmente útil para empresas de prestação de serviço que precisam mapear e consultar quadras rapidamente.
 
+> **⚠️ Em desenvolvimento:** o frontend Angular está sendo substituído por **Flutter**, que permitirá o uso do sistema tanto na web quanto em dispositivos móveis (Android e iOS) com uma única codebase. As funcionalidades do backend permanecem as mesmas.
+
 ---
 
 ## Screenshots
@@ -56,7 +58,7 @@ Cada quadra pode ser visualizada individualmente, com sua localização marcada 
 - Docker
 
 **Frontend**
-- Angular 21
+- Angular 21 *(sendo substituído por Flutter)*
 - TypeScript
 - Leaflet
 - Angular CDK
@@ -86,8 +88,8 @@ POSTGRES_PASSWORD=senha do postgres
 POSTGRES_DB=cityblockmap
 
 SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/cityblockmap
-SPRING_DATASOURCE_USERNAME=usuario do postgres
-SPRING_DATASOURCE_PASSWORD=senha do postgres
+DB_USERNAME=usuario do postgres
+DB_PASSWORD=senha do postgres
 
 ADMIN_DEFAULT_PASSWORD=defina uma senha forte para o usuário admin
 ```
