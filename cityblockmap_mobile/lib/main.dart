@@ -1,7 +1,13 @@
-import 'package:cityblockmap_mobile/pages/blocks/block_list_page.dart';
+import 'package:cityblockmap_mobile/core/guards/auth_guard.dart';
+import 'package:cityblockmap_mobile/pages/blocks/block_edit/block_edit_page.dart';
+import 'package:cityblockmap_mobile/pages/blocks/block_list/block_list_page.dart';
+import 'package:cityblockmap_mobile/pages/blocks/block_map/block_map_page.dart';
+import 'package:cityblockmap_mobile/pages/blocks/block_register/block_register_page.dart';
 import 'package:cityblockmap_mobile/pages/dashboard/dashboard_page.dart';
 import 'package:cityblockmap_mobile/pages/login/login_page.dart';
-import 'package:cityblockmap_mobile/pages/neighborhoods/neighborhood_list_page.dart';
+import 'package:cityblockmap_mobile/pages/neighborhoods/neighborhood_edit/neighborhood_edit_page.dart';
+import 'package:cityblockmap_mobile/pages/neighborhoods/neighborhood_list/neighborhood_list_page.dart';
+import 'package:cityblockmap_mobile/pages/neighborhoods/neighborhood_register/neighborhood_register_page.dart';
 import 'package:cityblockmap_mobile/pages/not-found/not_found_page.dart';
 import 'package:cityblockmap_mobile/pages/register/register_page.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +19,7 @@ void main() {
 
 final _router = GoRouter(
   initialLocation: '/login',
+  redirect: (context, state) => AuthGuard.redirect(state.matchedLocation),
   routes: [
     GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
     GoRoute(
@@ -24,8 +31,28 @@ final _router = GoRouter(
       builder: (context, state) => const BlockListPage(),
     ),
     GoRoute(
+      path: '/blocks/:id',
+      builder: (context, state) => const BlockMapPage(),
+    ),
+    GoRoute(
+      path: '/block-register',
+      builder: (context, state) => const BlockRegisterPage(),
+    ),
+    GoRoute(
+      path: '/block-edit/:id',
+      builder: (context, state) => const BlockEditPage(),
+    ),
+    GoRoute(
       path: '/neighborhoods',
       builder: (context, state) => const NeighborhoodListPage(),
+    ),
+    GoRoute(
+      path: '/neighborhood-register',
+      builder: (context, state) => const NeighborhoodRegisterPage(),
+    ),
+    GoRoute(
+      path: '/neighborhood-edit/:id',
+      builder: (context, state) => const NeighborhoodEditPage(),
     ),
     GoRoute(
       path: '/register',
