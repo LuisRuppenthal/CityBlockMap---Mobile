@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:cityblockmap_mobile/enviroment.dart';
 import 'package:cityblockmap_mobile/core/interceptors/auth_interceptor.dart';
 import 'package:cityblockmap_mobile/core/services/auth_service.dart';
+import 'package:cityblockmap_mobile/core/theme/app_colors.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -20,12 +21,6 @@ class _DashboardPageState extends State<DashboardPage> {
   bool _loadingBlocks = false;
   bool _loadingNeighborhoods = false;
   bool _isAdmin = false;
-
-  static const _blue900 = Color(0xFF0F1F3D);
-  static const _blue500 = Color(0xFF2563EB);
-  static const _blue50 = Color(0xFFEFF6FF);
-  static const _gray600 = Color(0xFF4B5563);
-  static const _gray300 = Color(0xFFD1D5DB);
 
   @override
   void initState() {
@@ -54,6 +49,7 @@ class _DashboardPageState extends State<DashboardPage> {
         if (mounted) setState(() => _blockCount = data.length);
       }
     } catch (_) {
+      // mantém contagem em 0 em caso de erro
     } finally {
       if (mounted) setState(() => _loadingBlocks = false);
     }
@@ -75,7 +71,7 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F4F6),
+      backgroundColor: AppColors.gray100,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -87,15 +83,15 @@ class _DashboardPageState extends State<DashboardPage> {
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: _blue900,
+                  color: AppColors.blue900,
                 ),
               ),
               const SizedBox(height: 8),
-              Container(height: 4, width: 48, color: _blue500),
+              Container(height: 4, width: 48, color: AppColors.blue500),
               const SizedBox(height: 14),
               const Text(
                 'Selecione uma seção para continuar',
-                style: TextStyle(fontSize: 14, color: _gray600),
+                style: TextStyle(fontSize: 14, color: AppColors.gray600),
               ),
               const SizedBox(height: 32),
               _buildCard(
@@ -115,8 +111,6 @@ class _DashboardPageState extends State<DashboardPage> {
                 icon: Icons.location_city_outlined,
                 onTap: () => context.push('/neighborhoods'),
               ),
-              // Card de usuários, só para ADMIN — equivalente ao bloco
-              // comentado no dashboard.html original
               if (_isAdmin) ...[
                 const SizedBox(height: 16),
                 _buildCard(
@@ -144,21 +138,15 @@ class _DashboardPageState extends State<DashboardPage> {
     required VoidCallback onTap,
   }) {
     return InkWell(
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(AppColors.radius),
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
         decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: _gray300),
-          borderRadius: BorderRadius.circular(14),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 16,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          color: AppColors.white,
+          border: Border.all(color: AppColors.gray300),
+          borderRadius: BorderRadius.circular(AppColors.radius),
+          boxShadow: AppColors.shadowMd,
         ),
         child: Row(
           children: [
@@ -166,10 +154,10 @@ class _DashboardPageState extends State<DashboardPage> {
               width: 56,
               height: 56,
               decoration: BoxDecoration(
-                color: _blue50,
+                color: AppColors.blue50,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(icon, color: _blue500, size: 26),
+              child: Icon(icon, color: AppColors.blue500, size: 26),
             ),
             const SizedBox(width: 20),
             Expanded(
@@ -181,7 +169,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     style: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
-                      color: _blue900,
+                      color: AppColors.blue900,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -191,12 +179,15 @@ class _DashboardPageState extends State<DashboardPage> {
                         : count != null
                         ? '$count $suffix'
                         : suffix,
-                    style: const TextStyle(fontSize: 13, color: _gray600),
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.gray600,
+                    ),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.arrow_forward, size: 18, color: _gray300),
+            const Icon(Icons.arrow_forward, size: 18, color: AppColors.gray300),
           ],
         ),
       ),
