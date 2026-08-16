@@ -41,7 +41,8 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: '/block-edit/:id',
-      builder: (context, state) => const BlockEditPage(),
+      builder: (context, state) =>
+          BlockEditPage(blockId: int.parse(state.pathParameters['id']!)),
     ),
     GoRoute(
       path: '/neighborhoods',
