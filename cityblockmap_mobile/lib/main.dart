@@ -52,7 +52,9 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: '/neighborhood-edit/:id',
-      builder: (context, state) => const NeighborhoodEditPage(),
+      builder: (context, state) => NeighborhoodEditPage(
+        neighborhoodId: int.parse(state.pathParameters['id']!),
+      ),
     ),
     GoRoute(
       path: '/register',

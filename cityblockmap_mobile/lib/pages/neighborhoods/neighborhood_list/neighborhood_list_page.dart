@@ -31,7 +31,9 @@ class _NeighborhoodListPageState extends State<NeighborhoodListPage> {
 
   Future<void> _checkAdmin() async {
     final isAdmin = await _authService.isAdmin();
-    if (mounted) setState(() => _isAdmin = isAdmin);
+    if (mounted) {
+      setState(() => _isAdmin = isAdmin);
+    }
   }
 
   Future<void> _loadNeighborhoods() async {
@@ -42,12 +44,17 @@ class _NeighborhoodListPageState extends State<NeighborhoodListPage> {
 
     try {
       final neighborhoods = await _neighborhoodService.getAll();
-      if (mounted) setState(() => _neighborhoods = neighborhoods);
+      if (mounted) {
+        setState(() => _neighborhoods = neighborhoods);
+      }
     } catch (_) {
-      if (mounted)
+      if (mounted) {
         setState(() => _errorMessage = 'Erro ao carregar as quadras.');
+      }
     } finally {
-      if (mounted) setState(() => _loading = false);
+      if (mounted) {
+        setState(() => _loading = false);
+      }
     }
   }
 
@@ -73,7 +80,9 @@ class _NeighborhoodListPageState extends State<NeighborhoodListPage> {
         await _loadNeighborhoods();
       } catch (_) {
         if (mounted) {
-          setState(() => _errorMessage = 'Erro ao excluir o bairro.');
+          setState(() {
+            _errorMessage = 'Erro ao excluir o bairro.';
+          });
         }
       }
     }
