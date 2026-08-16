@@ -43,3 +43,24 @@ class Block {
     'longitude': longitude,
   };
 }
+
+class BlockRequest {
+  final String number;
+  final double latitude;
+  final double longitude;
+  final int neighborhoodId;
+
+  BlockRequest({
+    required this.number,
+    required this.latitude,
+    required this.longitude,
+    required this.neighborhoodId,
+  });
+
+  Map<String, dynamic> toJson() => {
+    'number': number,
+    'latitude': latitude,
+    'longitude': longitude,
+    'neighborhood': {'id': neighborhoodId},
+  };
+}
