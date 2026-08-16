@@ -32,7 +32,8 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: '/blocks/:id',
-      builder: (context, state) => const BlockMapPage(),
+      builder: (context, state) =>
+          BlockMapPage(blockId: int.parse(state.pathParameters['id']!)),
     ),
     GoRoute(
       path: '/block-register',
