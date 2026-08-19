@@ -1,4 +1,6 @@
+import 'package:cityblockmap_mobile/core/guards/admin_guard.dart';
 import 'package:cityblockmap_mobile/core/guards/auth_guard.dart';
+import 'package:cityblockmap_mobile/core/navigation/navigator_key.dart';
 import 'package:cityblockmap_mobile/pages/blocks/block_edit/block_edit_page.dart';
 import 'package:cityblockmap_mobile/pages/blocks/block_list/block_list_page.dart';
 import 'package:cityblockmap_mobile/pages/blocks/block_map/block_map_page.dart';
@@ -10,6 +12,8 @@ import 'package:cityblockmap_mobile/pages/neighborhoods/neighborhood_list/neighb
 import 'package:cityblockmap_mobile/pages/neighborhoods/neighborhood_register/neighborhood_register_page.dart';
 import 'package:cityblockmap_mobile/pages/not-found/not_found_page.dart';
 import 'package:cityblockmap_mobile/pages/register/register_page.dart';
+import 'package:cityblockmap_mobile/widgets/common/app_header.dart';
+import 'package:cityblockmap_mobile/widgets/common/session_expired_banner.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -18,49 +22,77 @@ void main() {
 }
 
 final _router = GoRouter(
+  navigatorKey: rootNavigatorKey,
   initialLocation: '/login',
-  redirect: (context, state) => AuthGuard.redirect(state.matchedLocation),
+  redirect: (context, state) async {
+    final location = state.matchedLocation;
+
+    final authRedirect = await AuthGuard.redirect(location);
+    if (authRedirect != null) return authRedirect;
+
+    final adminRedirect = await AdminGuard.redirect(location);
+    if (adminRedirect != null) return adminRedirect;
+
+    return null;
+  },
   routes: [
+    // Aqui o Login vai ficar FORA do ShellRoute, dessa forma ele não vai mostrar o header na pagina de Login
     GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
-    GoRoute(
-      path: '/dashboard',
-      builder: (context, state) => const DashboardPage(),
-    ),
-    GoRoute(
-      path: '/blocks',
-      builder: (context, state) => const BlockListPage(),
-    ),
-    GoRoute(
-      path: '/blocks/:id',
-      builder: (context, state) =>
-          BlockMapPage(blockId: int.parse(state.pathParameters['id']!)),
-    ),
-    GoRoute(
-      path: '/block-register',
-      builder: (context, state) => const BlockRegisterPage(),
-    ),
-    GoRoute(
-      path: '/block-edit/:id',
-      builder: (context, state) =>
-          BlockEditPage(blockId: int.parse(state.pathParameters['id']!)),
-    ),
-    GoRoute(
-      path: '/neighborhoods',
-      builder: (context, state) => const NeighborhoodListPage(),
-    ),
-    GoRoute(
-      path: '/neighborhood-register',
-      builder: (context, state) => const NeighborhoodRegisterPage(),
-    ),
-    GoRoute(
-      path: '/neighborhood-edit/:id',
-      builder: (context, state) => NeighborhoodEditPage(
-        neighborhoodId: int.parse(state.pathParameters['id']!),
-      ),
-    ),
-    GoRoute(
-      path: '/register',
-      builder: (context, state) => const RegisterPage(),
+
+    // Todas as demais rotas vão ficar dentro do ShellRoute, que injeta o AppHeader na parte de cima de cada página
+    ShellRoute(
+      builder: (context, state, child) {
+        return Scaffold(
+          body: Column(
+            children: [
+              const AppHeader(),
+              Expanded(child: child),
+            ],
+          ),
+        );
+      },
+      routes: [
+        GoRoute(
+          path: '/dashboard',
+          builder: (context, state) => const DashboardPage(),
+        ),
+        GoRoute(
+          path: '/blocks',
+          builder: (context, state) => const BlockListPage(),
+        ),
+        GoRoute(
+          path: '/blocks/:id',
+          builder: (context, state) =>
+              BlockMapPage(blockId: int.parse(state.pathParameters['id']!)),
+        ),
+        GoRoute(
+          path: '/block-register',
+          builder: (context, state) => const BlockRegisterPage(),
+        ),
+        GoRoute(
+          path: '/block-edit/:id',
+          builder: (context, state) =>
+              BlockEditPage(blockId: int.parse(state.pathParameters['id']!)),
+        ),
+        GoRoute(
+          path: '/neighborhoods',
+          builder: (context, state) => const NeighborhoodListPage(),
+        ),
+        GoRoute(
+          path: '/neighborhood-register',
+          builder: (context, state) => const NeighborhoodRegisterPage(),
+        ),
+        GoRoute(
+          path: '/neighborhood-edit/:id',
+          builder: (context, state) => NeighborhoodEditPage(
+            neighborhoodId: int.parse(state.pathParameters['id']!),
+          ),
+        ),
+        GoRoute(
+          path: '/register',
+          builder: (context, state) => const RegisterPage(),
+        ),
+      ],
     ),
   ],
   errorBuilder: (context, state) => const NotFoundPage(),
@@ -79,6 +111,11 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routerConfig: _router,
+      builder: (context, child) {
+        return Stack(
+          children: [if (child != null) child, const SessionExpiredBanner()],
+        );
+      },
     );
   }
 }

@@ -44,6 +44,21 @@ class AuthService {
     }
   }
 
+  Future<String> getLogin() async {
+    final token = await getToken();
+    if (token == null) return '';
+    try {
+      final parts = token.split('.');
+      if (parts.length != 3) return '';
+      final payload = jsonDecode(
+        utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))),
+      );
+      return payload['sub'] ?? '';
+    } catch (_) {
+      return '';
+    }
+  }
+
   Future<bool> isAuthenticated() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('token') != null;
