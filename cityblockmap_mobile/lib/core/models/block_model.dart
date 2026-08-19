@@ -1,11 +1,11 @@
 class NeighborhoodRef {
   final int id;
-  final String name;
+  final String? name;
 
-  NeighborhoodRef({required this.id, required this.name});
+  NeighborhoodRef({required this.id, this.name});
 
   factory NeighborhoodRef.fromJson(Map<String, dynamic> json) {
-    return NeighborhoodRef(id: json['id'], name: json['name']);
+    return NeighborhoodRef(id: json['id'], name: json['name'] as String?);
   }
 }
 

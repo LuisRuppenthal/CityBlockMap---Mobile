@@ -27,7 +27,7 @@ class BlockService {
     }
   }
 
-  Future<Block> create(BlockRequest data) async {
+  Future<Block?> create(BlockRequest data) async {
     final response = await authInterceptor.post(
       Uri.parse('$_apiUrl/create'),
       headers: {'Content-Type': 'application/json'},
@@ -35,13 +35,17 @@ class BlockService {
     );
 
     if (response.statusCode == 201) {
-      return Block.fromJson(jsonDecode(response.body));
+      try {
+        return Block.fromJson(jsonDecode(response.body));
+      } catch (_) {
+        return null;
+      }
     } else {
       throw Exception('Erro ao criar a quadra. (${response.statusCode})');
     }
   }
 
-  Future<Block> update(int id, BlockRequest data) async {
+  Future<Block?> update(int id, BlockRequest data) async {
     final response = await authInterceptor.put(
       Uri.parse('$_apiUrl/update/$id'),
       headers: {'Content-Type': 'application/json'},
@@ -49,7 +53,11 @@ class BlockService {
     );
 
     if (response.statusCode == 200) {
-      return Block.fromJson(jsonDecode(response.body));
+      try {
+        return Block.fromJson(jsonDecode(response.body));
+      } catch (_) {
+        return null;
+      }
     } else {
       throw Exception('Erro ao atualizar a quadra. (${response.statusCode})');
     }
