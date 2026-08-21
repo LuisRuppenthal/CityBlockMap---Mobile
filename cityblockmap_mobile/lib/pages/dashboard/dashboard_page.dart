@@ -119,7 +119,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   count: null,
                   suffix: 'Gerenciar usuários',
                   icon: Icons.people_outline,
-                  onTap: () => context.push('/register'),
+                  onTap: () => context.push('/users'),
                 ),
               ],
             ],

@@ -8,6 +8,8 @@ class AdminGuard {
     '/register',
     '/neighborhood-register',
     '/block-register',
+    '/users',
+    '/user-edit',
   ];
 
   static Future<String?> redirect(String location) async {

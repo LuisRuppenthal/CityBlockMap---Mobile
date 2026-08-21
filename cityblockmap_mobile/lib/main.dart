@@ -12,6 +12,8 @@ import 'package:cityblockmap_mobile/pages/neighborhoods/neighborhood_list/neighb
 import 'package:cityblockmap_mobile/pages/neighborhoods/neighborhood_register/neighborhood_register_page.dart';
 import 'package:cityblockmap_mobile/pages/not-found/not_found_page.dart';
 import 'package:cityblockmap_mobile/pages/register/register_page.dart';
+import 'package:cityblockmap_mobile/pages/users/user_edit/user_edit_page.dart';
+import 'package:cityblockmap_mobile/pages/users/user_list/user_list_page.dart';
 import 'package:cityblockmap_mobile/widgets/common/app_header.dart';
 import 'package:cityblockmap_mobile/widgets/common/session_expired_banner.dart';
 import 'package:flutter/material.dart';
@@ -91,6 +93,15 @@ final _router = GoRouter(
         GoRoute(
           path: '/register',
           builder: (context, state) => const RegisterPage(),
+        ),
+        GoRoute(
+          path: '/users',
+          builder: (context, state) => const UserListPage(),
+        ),
+        GoRoute(
+          path: '/user-edit/:id',
+          builder: (context, state) =>
+              UserEditPage(userId: int.parse(state.pathParameters['id']!)),
         ),
       ],
     ),
