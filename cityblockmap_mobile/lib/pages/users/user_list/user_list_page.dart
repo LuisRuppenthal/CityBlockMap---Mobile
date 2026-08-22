@@ -20,7 +20,6 @@ class _UserListPageState extends State<UserListPage> {
   List<User> _users = [];
   bool _loading = false;
   String? _errorMessage;
-  String _currentLogin = '';
 
   @override
   void initState() {
@@ -40,7 +39,6 @@ class _UserListPageState extends State<UserListPage> {
 
       if (mounted) {
         setState(() {
-          _currentLogin = currentLogin;
           // Exclui o usuário atualmente logado da lista.
           _users = users.where((u) => u.login != currentLogin).toList();
         });

@@ -123,9 +123,7 @@ class MyApp extends StatelessWidget {
       ),
       routerConfig: _router,
       builder: (context, child) {
-        return Stack(
-          children: [if (child != null) child, const SessionExpiredBanner()],
-        );
+        return Stack(children: [?child, const SessionExpiredBanner()]);
       },
     );
   }
