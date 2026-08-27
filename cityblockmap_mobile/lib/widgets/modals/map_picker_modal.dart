@@ -45,135 +45,143 @@ class _MapPickerModalState extends State<MapPickerModal> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.sizeOf(context);
+
+    final width = screenSize.width < 640 ? screenSize.width - 32 : 600.0;
+    final height = screenSize.height < 700 ? screenSize.height - 96 : 600.0;
+
     return Dialog(
       insetPadding: const EdgeInsets.all(16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppColors.radius),
       ),
-      child: SizedBox(
-        width: 600,
-        height: 600,
-        child: Column(
+      child: SizedBox(width: width, height: height, child: _buildContent()),
+    );
+  }
+
+  Widget _buildContent() {
+    return Column(
+      children: [
+        _buildHeader(),
+        Expanded(child: _buildMap()),
+        _buildActions(),
+      ],
+    );
+  }
+
+  Widget _buildHeader() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 16, 12, 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Selecione a localização',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: AppColors.blue900,
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.close, color: AppColors.gray600),
+            onPressed: _cancel,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMap() {
+    return Stack(
+      children: [
+        FlutterMap(
+          options: MapOptions(
+            initialCenter: _selectedPoint ?? _defaultCenter,
+            initialZoom: _selectedPoint != null ? 14 : 4,
+            onTap: _onTap,
+          ),
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 12, 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Selecione a localização',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.blue900,
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close, color: AppColors.gray600),
-                    onPressed: _cancel,
-                  ),
-                ],
-              ),
+            TileLayer(
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              userAgentPackageName: 'com.cityblockmap.mobile',
             ),
-            Expanded(
-              child: Stack(
-                children: [
-                  FlutterMap(
-                    options: MapOptions(
-                      initialCenter: _selectedPoint ?? _defaultCenter,
-                      initialZoom: _selectedPoint != null ? 14 : 4,
-                      onTap: _onTap,
-                    ),
-                    children: [
-                      TileLayer(
-                        urlTemplate:
-                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        userAgentPackageName: 'com.cityblockmap.mobile',
-                      ),
-                      if (_selectedPoint != null)
-                        MarkerLayer(
-                          markers: [
-                            Marker(
-                              point: _selectedPoint!,
-                              width: 40,
-                              height: 40,
-                              child: const Icon(
-                                Icons.location_pin,
-                                color: AppColors.accent,
-                                size: 40,
-                              ),
-                            ),
-                          ],
-                        ),
-                    ],
-                  ),
-                  Positioned(
-                    left: 12,
-                    right: 12,
-                    bottom: 12,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: AppColors.shadowMd,
-                      ),
-                      child: Text(
-                        _selectedPoint != null
-                            ? 'Lat: ${_selectedPoint!.latitude.toStringAsFixed(4)}  '
-                                  'Lng: ${_selectedPoint!.longitude.toStringAsFixed(4)}'
-                            : 'Toque no mapa para marcar o ponto',
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: AppColors.gray600,
-                        ),
-                      ),
+            if (_selectedPoint != null)
+              MarkerLayer(
+                markers: [
+                  Marker(
+                    point: _selectedPoint!,
+                    width: 40,
+                    height: 40,
+                    child: const Icon(
+                      Icons.location_pin,
+                      color: AppColors.accent,
+                      size: 40,
                     ),
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: _cancel,
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 13),
-                        foregroundColor: AppColors.gray600,
-                        side: const BorderSide(color: AppColors.gray300),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text('Cancelar'),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: _selectedPoint != null ? _confirm : null,
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 13),
-                        backgroundColor: AppColors.blue500,
-                        foregroundColor: AppColors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text('Confirmar'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
+        Positioned(
+          left: 12,
+          right: 12,
+          bottom: 12,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: AppColors.shadowMd,
+            ),
+            child: Text(
+              _selectedPoint != null
+                  ? 'Lat: ${_selectedPoint!.latitude.toStringAsFixed(4)}  '
+                        'Lng: ${_selectedPoint!.longitude.toStringAsFixed(4)}'
+                  : 'Toque no mapa para marcar o ponto',
+              style: const TextStyle(fontSize: 13, color: AppColors.gray600),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActions() {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          Expanded(
+            child: OutlinedButton(
+              onPressed: _cancel,
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 13),
+                foregroundColor: AppColors.gray600,
+                side: const BorderSide(color: AppColors.gray300),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text('Cancelar'),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: _selectedPoint != null ? _confirm : null,
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 13),
+                backgroundColor: AppColors.blue500,
+                foregroundColor: AppColors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text('Confirmar'),
+            ),
+          ),
+        ],
       ),
     );
   }

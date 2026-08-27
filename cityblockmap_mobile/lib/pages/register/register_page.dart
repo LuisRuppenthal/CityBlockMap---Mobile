@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:cityblockmap_mobile/core/models/user_model.dart';
 import 'package:cityblockmap_mobile/core/services/user_service.dart';
 import 'package:cityblockmap_mobile/core/theme/app_colors.dart';
+import 'package:cityblockmap_mobile/core/theme/responsive.dart';
 import 'package:cityblockmap_mobile/widgets/common/app_alert.dart';
 import 'package:cityblockmap_mobile/widgets/common/app_form_field.dart';
 
@@ -87,11 +88,16 @@ class _RegisterPageState extends State<RegisterPage> {
       backgroundColor: AppColors.gray100,
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(context.isMobile ? 12 : 24),
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 460),
             child: Container(
-              padding: const EdgeInsets.fromLTRB(48, 40, 48, 40),
+              padding: EdgeInsets.fromLTRB(
+                context.isMobile ? 20 : 48,
+                context.isMobile ? 28 : 40,
+                context.isMobile ? 20 : 48,
+                context.isMobile ? 28 : 40,
+              ),
               decoration: BoxDecoration(
                 color: AppColors.white,
                 border: Border.all(color: AppColors.gray300),

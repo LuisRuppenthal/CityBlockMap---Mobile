@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cityblockmap_mobile/core/services/auth_service.dart';
 import 'package:cityblockmap_mobile/core/theme/app_colors.dart';
+import 'package:cityblockmap_mobile/core/theme/responsive.dart';
 
 class AppHeader extends StatefulWidget {
   const AppHeader({super.key});
@@ -50,7 +51,7 @@ class _AppHeaderState extends State<AppHeader> {
       elevation: 1,
       child: Container(
         height: 60,
-        padding: const EdgeInsets.symmetric(horizontal: 32),
+        padding: EdgeInsets.symmetric(horizontal: context.isMobile ? 16 : 32),
         decoration: const BoxDecoration(
           border: Border(bottom: BorderSide(color: AppColors.gray300)),
         ),
@@ -59,9 +60,9 @@ class _AppHeaderState extends State<AppHeader> {
           children: [
             InkWell(
               onTap: () => context.go('/dashboard'),
-              child: const Text(
-                'CityBlockMap',
-                style: TextStyle(
+              child: Text(
+                context.isMobile ? 'CBM' : 'CityBlockMap',
+                style: const TextStyle(
                   fontFamily: 'Syne',
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -70,14 +71,14 @@ class _AppHeaderState extends State<AppHeader> {
                 ),
               ),
             ),
-            _buildUserMenu(),
+            _buildUserMenu(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildUserMenu() {
+  Widget _buildUserMenu(BuildContext context) {
     return MenuAnchor(
       controller: _menuController,
       style: MenuStyle(
@@ -134,12 +135,18 @@ class _AppHeaderState extends State<AppHeader> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  _login,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.gray600,
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: context.isMobile ? 90 : 200,
+                  ),
+                  child: Text(
+                    _login,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.gray600,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),

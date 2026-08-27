@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:cityblockmap_mobile/core/models/auth_model.dart';
 import 'package:cityblockmap_mobile/core/services/auth_service.dart';
 import 'package:cityblockmap_mobile/core/theme/app_colors.dart';
+import 'package:cityblockmap_mobile/core/theme/responsive.dart';
 import 'package:cityblockmap_mobile/widgets/common/app_text_field.dart';
 import 'package:cityblockmap_mobile/widgets/common/app_button.dart';
 
@@ -56,11 +57,16 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: AppColors.gray100,
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(32),
+          padding: EdgeInsets.all(context.isMobile ? 16 : 32),
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 420),
             child: Container(
-              padding: const EdgeInsets.fromLTRB(48, 90, 48, 48),
+              padding: EdgeInsets.fromLTRB(
+                context.isMobile ? 24 : 48,
+                context.isMobile ? 48 : 90,
+                context.isMobile ? 24 : 48,
+                context.isMobile ? 32 : 48,
+              ),
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(AppColors.radius),
