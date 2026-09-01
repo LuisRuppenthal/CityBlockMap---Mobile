@@ -18,7 +18,7 @@ services:
 
   frontend:
     build:
-      context: ./cityblockmap - frontend
+      context: ./cityblockmap_mobile
     ports:
       - "80:80"
     depends_on:
