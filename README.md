@@ -1,47 +1,75 @@
-# CityBlockMap
+# CityBlockMap_Mobile
 
 Sistema web para mapeamento de quadras e bairros de uma cidade. Desenvolvido para facilitar a localização de quadras e bairros, sendo especialmente útil para empresas de prestação de serviço que precisam mapear e consultar quadras rapidamente.
 
-> **⚠️ Em desenvolvimento:** o frontend Angular está sendo substituído por **Flutter**, que permitirá o uso do sistema tanto na web quanto em dispositivos móveis (Android e iOS) com uma única codebase. As funcionalidades do backend permanecem as mesmas.
+> **Frontend migrado para Flutter:** o frontend original em Angular foi substituído por **Flutter**, permitindo o uso do sistema tanto na web quanto em dispositivos móveis (Android) a partir de uma única codebase. As funcionalidades do backend permanecem as mesmas.
 
 ---
 
 ## Screenshots
-
+ 
 ### Dashboard (visão do administrador)
 ![Dashboard admin](assets/Screenshots/dashboard-admin.png)
-
+ 
 O menu do administrador tem acesso completo: cadastro de usuários, bairros e quadras, além das configurações.
-
+ 
 ### Seleção de localização no mapa
 ![Seleção de localização](assets/Screenshots/modal_do_mapa.png)
-
+ 
 Ao cadastrar uma quadra, é possível clicar diretamente no mapa para definir a latitude e longitude, em vez de digitar os valores manualmente.
-
+ 
 ### Lista de bairros e quadras
 | Visão do administrador | Visão do usuário comum |
 |---|---|
 | ![Bairros admin](assets/Screenshots/bairros-admin.png) | ![Bairros usuário](assets/Screenshots/bairros-usuario.png) |
 | ![Quadras admin](assets/Screenshots/quadras-admin.png) | ![Quadras usuário](assets/Screenshots/quadras-usuario.png) |
-
+ 
 O usuário comum visualiza as mesmas listas, porém sem os botões de editar e excluir — esse controle de acesso é validado tanto no frontend quanto no backend.
-
+ 
 ### Detalhe de uma quadra no mapa
 ![Detalhe da quadra](assets/Screenshots/mapa.png)
-
-Cada quadra pode ser visualizada individualmente, com sua localização marcada no mapa via Leaflet.
-
+ 
+### Gerenciamento de usuários (acesso restrito a administradores)
+![Gerenciar usuários](assets/Screenshots/usuarios-admin.png)
+ 
+Tela exclusiva para usuários com perfil ADMIN, listando os demais usuários cadastrados (o usuário atualmente logado não aparece na própria lista), com opções de criar, editar e excluir.
+ 
+---
+ 
+## Screenshots (Mobile)
+ 
+As mesmas telas da versão web, agora rodando nativamente em um emulador Android.
+ 
+### Dashboard (visão do administrador)
+![Dashboard admin mobile](assets/Screenshots/mobile/dashboard-admin.png)
+ 
+### Seleção de localização no mapa
+![Seleção de localização mobile](assets/Screenshots/mobile/modal_do_mapa.png)
+ 
+### Lista de bairros e quadras
+| Visão do administrador | Visão do usuário comum |
+|---|---|
+| ![Bairros admin mobile](assets/Screenshots/mobile/bairros-admin.png) | ![Bairros usuário mobile](assets/Screenshots/mobile/bairros-usuario.png) |
+| ![Quadras admin mobile](assets/Screenshots/mobile/quadras-admin.png) | ![Quadras usuário mobile](assets/Screenshots/mobile/quadras-usuario.png) |
+ 
+### Detalhe de uma quadra no mapa
+![Detalhe da quadra mobile](assets/Screenshots/mobile/mapa.png)
+ 
+### Gerenciamento de usuários (acesso restrito a administradores)
+![Gerenciar usuários mobile](assets/Screenshots/mobile/usuarios-admin.png)
+ 
 ---
 
 ## Funcionalidades
 
 - Cadastro, edição e exclusão de quadras e bairros
-- Visualização de quadras no mapa com marcação de coordenadas via Leaflet
+- Visualização de quadras no mapa com marcação de coordenadas
 - Seleção de localização diretamente no mapa ao cadastrar uma quadra
 - Gerenciamento de usuários com perfis **ADMIN** e **USER**
 - Autenticação via JWT com expiração automática de sessão
 - Dashboard com contadores de quadras e bairros cadastrados
 - Controle de acesso por perfil — apenas ADMINs podem cadastrar, editar e excluir
+- Layout responsivo, adaptado tanto para telas largas (web) quanto estreitas (celular)
 
 ---
 
@@ -58,23 +86,26 @@ Cada quadra pode ser visualizada individualmente, com sua localização marcada 
 - Docker
 
 **Frontend**
-- Angular 21 *(sendo substituído por Flutter)*
-- TypeScript
-- Leaflet
-- Angular CDK
+- Flutter + Dart
+- go_router (roteamento e guards de autenticação/autorização)
+- http (requisições HTTP)
+- shared_preferences (armazenamento do token JWT)
+- flutter_map + latlong2
+- Docker + Nginx (build e servidor de produção da versão web)
 
 ---
 
 ## Pré-requisitos
 
-- [Docker](https://www.docker.com/) instalado
+- [Docker](https://www.docker.com/) instalado — necessário para rodar a versão **web** e para o backend/banco de dados usados pela versão **mobile**
+- [Flutter SDK](https://docs.flutter.dev/get-started/install) instalado — necessário apenas para rodar a versão **mobile** em um emulador ou dispositivo físico
 - Dois arquivos de configuração que **não foram para o repositório** por conterem dados sensíveis (veja a seção abaixo)
 
 ---
 
 ## ⚠️ Configuração obrigatória antes de rodar
 
-O projeto precisa de **dois arquivos** que não são versionados no Git. Sem eles, o backend não inicializa.
+O projeto precisa de **dois arquivos** que não são versionados no Git. Sem eles, o backend não inicializa — isso vale tanto para rodar a versão web quanto a versão mobile.
 
 ### 1. Arquivo `.env` na raiz do projeto
 
@@ -145,9 +176,11 @@ spring.flyway.locations=classpath:db/migration
 
 ---
 
-## Como rodar com Docker
+## Como rodar a versão Web
 
-Após criar os dois arquivos acima:
+### Opção 01 — Docker (recomendado)
+
+Sobe o backend, o banco de dados e o frontend web em um único comando. Após criar os dois arquivos de configuração da seção anterior:
 
 ```bash
 docker-compose up -d --build
@@ -155,10 +188,67 @@ docker-compose up -d --build
 
 Aguarde os containers subirem e acesse:
 
-- **Frontend:** http://localhost
+- **Frontend (web):** http://localhost
 - **Backend:** http://localhost:8080
 
 O banco de dados é criado automaticamente pelo Flyway na primeira execução.
+
+> O frontend é compilado a partir do projeto Flutter (`flutter build web`) e servido por um container Nginx — o mesmo padrão multi-stage usado neste [repositório](https://github.com/LuisRuppenthal/CityBlockMap) com o Angular, apenas trocando as ferramentas de build.
+
+### Opção 02 — Desenvolvimento local (sem Docker no frontend)
+
+Útil para desenvolver com hot reload, sem precisar rebuildar a imagem Docker a cada alteração.
+
+**Backend** (via Docker ou localmente):
+```bash
+cd "cityblockmap - Backend"
+mvn spring-boot:run
+```
+O perfil de desenvolvimento usa banco H2.
+
+**Frontend:**
+```bash
+cd cityblockmap_mobile
+flutter pub get
+flutter run -d edge
+```
+
+---
+
+## Como rodar a versão Mobile (Android)
+
+Diferente da versão web, a versão mobile **não roda dentro do Docker** — ela é instalada nativamente em um emulador ou dispositivo físico através do próprio Flutter. O Docker continua responsável apenas pelo backend e pelo banco de dados.
+
+### 1. Suba o backend e o banco (Docker)
+
+```bash
+docker-compose up -d --build backend postgres
+```
+
+### 2. Instale as dependências do Flutter
+
+```bash
+cd cityblockmap_mobile
+flutter pub get
+```
+
+### 3. Inicie um emulador Android
+
+Com o Android Studio instalado e um dispositivo virtual já configurado:
+
+```bash
+flutter emulators --launch <nome_do_emulador>
+```
+
+### 4. Rode o app
+
+```bash
+flutter run
+```
+
+O Flutter detecta automaticamente o emulador conectado e instala o app nele.
+
+> **Nota técnica:** o app ajusta sozinho a URL da API dependendo de onde está rodando. No emulador Android, `127.0.0.1` aponta para o próprio dispositivo virtual (não para o computador host) — por isso a aplicação usa o endereço especial `10.0.2.2`, que redireciona de volta para o backend rodando no Docker. Na web e no desktop, a URL padrão (`127.0.0.1`) é usada normalmente.
 
 ---
 
@@ -167,25 +257,6 @@ O banco de dados é criado automaticamente pelo Flyway na primeira execução.
 Um usuário **admin** é criado/atualizado automaticamente na inicialização do backend, com login `admin` e a senha definida na variável `ADMIN_DEFAULT_PASSWORD` do seu `.env`.
 
 > Nenhuma senha fica fixa no código-fonte ou nas migrations. Se você trocar a senha do admin diretamente pela aplicação, o backend deixa de sobrescrevê-la nas próximas inicializações — a sobrescrita só ocorre enquanto a senha estiver no valor padrão original.
-
----
-
-## Como rodar em desenvolvimento local
-
-**Backend:**
-```bash
-cd "cityblockmap - Backend"
-mvn spring-boot:run
-```
-
-**Frontend:**
-```bash
-cd "cityblockmap - frontend"
-npm install
-ng serve
-```
-
-O perfil de desenvolvimento usa banco H2.
 
 ---
 
@@ -207,4 +278,4 @@ O perfil de desenvolvimento usa banco H2.
 ## Autor
 
 **Luís Henrique De Oliveira Ruppenthal**
-[GitHub](https://github.com/LuisRuppenthal/CityBlockMap)
+[GitHub](https://github.com/LuisRuppenthal/CityBlockMap_Mobile)

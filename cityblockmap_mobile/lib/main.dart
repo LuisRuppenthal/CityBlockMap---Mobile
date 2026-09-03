@@ -45,11 +45,13 @@ final _router = GoRouter(
     ShellRoute(
       builder: (context, state, child) {
         return Scaffold(
-          body: Column(
-            children: [
-              const AppHeader(),
-              Expanded(child: child),
-            ],
+          body: SafeArea(
+            child: Column(
+              children: [
+                const AppHeader(),
+                Expanded(child: child),
+              ],
+            ),
           ),
         );
       },
