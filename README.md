@@ -6,6 +6,22 @@ Sistema web para mapeamento de quadras e bairros de uma cidade. Desenvolvido par
 
 ---
 
+## Sobre este projeto
+
+Este repositório documenta a migração solo do frontend do CityBlockMap, originalmente em Angular, para **Flutter**. O objetivo foi permitir que a mesma aplicação rodasse tanto na web quanto em dispositivos móveis, sem alterar o backend existente.
+
+Ao longo da migração, foram trabalhados:
+
+- Recriação de todas as telas e fluxos do sistema original (autenticação, CRUD de bairros e quadras, gerenciamento de usuários, controle de acesso por perfil)
+- Roteamento e proteção de rotas (`go_router`, guards de autenticação e autorização)
+- Integração com mapas (`flutter_map`), incluindo seleção de coordenadas por toque
+- Tratamento de sessão expirada com feedback visual e logout automático
+- Layout responsivo, adaptado tanto para telas largas (web) quanto estreitas (celular)
+- Containerização da versão web com Docker + Nginx, integrada ao `docker-compose` já existente do projeto
+- Diagnóstico e correção de bugs específicos de cada plataforma
+
+---
+
 ## Screenshots
  
 ### Dashboard (visão do administrador)
@@ -232,13 +248,40 @@ cd cityblockmap_mobile
 flutter pub get
 ```
 
-### 3. Inicie um emulador Android
+### 3. Configure um emulador Android
 
-Com o Android Studio instalado e um dispositivo virtual já configurado:
+Se você ainda não tem nenhum emulador criado, confira primeiro o que já existe disponível:
+
+```bash
+flutter emulators
+```
+
+Se a lista vier vazia, crie um novo dispositivo virtual (AVD) pelo **Android Studio**:
+
+1. Abra o Android Studio
+2. Vá em **More Actions → Virtual Device Manager** (ou **Tools → Device Manager**, se já tiver um projeto aberto)
+3. Clique em **Create Device**
+4. Escolha um dispositivo (ex: **Pixel 7** ou **Pixel 8**) → **Next**
+5. Escolha uma imagem de sistema (System Image) — veja a seção abaixo sobre qual versão escolher — e baixe-a se ainda não tiver localmente → **Next**
+6. **Finish**
+
+Alternativamente, pelo terminal:
+
+```bash
+flutter emulators --create --name meu_emulador
+```
+
+Com o emulador criado, inicie-o:
 
 ```bash
 flutter emulators --launch <nome_do_emulador>
 ```
+
+**Quais versões de Android são compatíveis?**
+
+Recomenda-se uma imagem de sistema **Android 13 (API 33) ou superior**. Versões mais recentes (Android 14/API 34 em diante) tendem a ter melhor suporte a bibliotecas atuais do Flutter e menos avisos de compatibilidade durante o build. Prefira imagens **"Google Play"** ou **"Google APIs"** (em vez de "Google APIs Intel x86 Atom" antigas ou imagens sem Google Play Services), que garantem melhor compatibilidade geral.
+
+Emuladores com versões muito antigas do Android (abaixo da API 21) não são suportados pelo Flutter.
 
 ### 4. Rode o app
 
@@ -274,8 +317,11 @@ Um usuário **admin** é criado/atualizado automaticamente na inicialização do
 | `ADMIN_DEFAULT_PASSWORD` | `.env` | Senha do usuário admin padrão da aplicação |
 
 ---
-
+<!--## Licença
+Este projeto está sob a licença MIT — veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+---
+-->
 ## Autor
 
 **Luís Henrique De Oliveira Ruppenthal**
-[GitHub](https://github.com/LuisRuppenthal/CityBlockMap_Mobile)
+[GitHub](https://github.com/LuisRuppenthal/CityBlockMap)
